@@ -9,22 +9,29 @@ public partial class EditarProduto : ContentPage
         InitializeComponent();
     }
 
+    protected override void OnBindingContextChanged()
+    {
+        base.OnBindingContextChanged();
+
+        if (BindingContext is Produto produto)
+        {
+            pickerCategoria.SelectedItem = produto.Categoria;
+        }
+    }
+
     private async void ToolbarItem_Clicked(object sender, EventArgs e)
     {
         try
         {
-            Produto produto_anexado = BindingContext as Produto;
+            Produto produto = BindingContext as Produto;
 
-            Produto p = new Produto
-            {
-                Id = produto_anexado.Id,
-                Descricao = txt_descricao.Text,
-                Quantidade = Convert.ToDouble(txt_quantidade.Text),
-                Preco = Convert.ToDouble(txt_preco.Text),
-                Categoria = pickerCategoria.SelectedItem?.ToString()
-            };
+            produto.Descricao = txt_descricao.Text;
+            produto.Quantidade = Convert.ToDouble(txt_quantidade.Text);
+            produto.Preco = Convert.ToDouble(txt_preco.Text);
+            produto.Categoria = pickerCategoria.SelectedItem?.ToString();
 
-            await App.Db.Update(p);
+            await App.Db.Update(produto);
+
             await DisplayAlert("Sucesso!", "Registro Atualizado", "OK");
             await Navigation.PopAsync();
         }
