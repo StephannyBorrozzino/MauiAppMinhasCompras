@@ -9,6 +9,19 @@ namespace MauiAppMinhasCompras.Models
 {
     public class Produto
     {
+        string _categoria;
+        public string Categoria
+        {
+            get => _categoria;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new Exception("Por favor, informe a categoria");
+
+                _categoria = value;
+            }
+        }
+
         string _descricao;
 
         [PrimaryKey, AutoIncrement]
